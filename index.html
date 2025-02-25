@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header class="flex justify-around w-full bg-blue-300 h-full">
+        <div id="inicio" class="w-1/4 bg-blue-400"><h1>Ahorradas</h1></div>
+        <div class="flex w-1/4  bg-blue-100">
+            <ul>
+                <li><button id="botonModalCategoria">categoria</button></li>
+                <li>Balance</li>
+                <li>Reportes</li>
+            </ul>
+        </div>
+    </header>
+    <div class="hidden flex justify-around align-center p-20 overflow-hidden z-40 h-[46rem] w-full bg-gray-400 " id="modalCategoria" >
+        <div id="cargarCategoria" class="flex flex-col justify-around p-10 h-auto align-center bg-white">
+            <div class="flex justify-around flex-row">
+                <input id="input-categoria" type="text" name="" placeholder="Ingresa una categoria">
+                <button id="boton-añadir-categoria" type="submit">Cargar Categoria</button>
+            </div>
+            <div class="contenedor-categorias flex flex-col h-auto">
+                
+            </div>
+        </div>
+    </div>
+    <div id="main" class="flex justify-around flex-row z-10 align-center">
+        <div class="flex flex-row w-auto bg-blue-200 h-[20rem] m-5" >
+            <div class="flex flex-col justify-between p-10">
+                <div class="bg-green-100 w-[16rem] h-[26rem] text-center">
+                    <H2>Balance</H2>
+                    <div class="flex flex-row justify-between m-5">
+                        <div><h3>Ganancias</h3></div>
+                        <div> <p>$0</p></div>
+                    </div>
+                    <div class="flex flex-row justify-between m-5">
+                        <div><h3>Gastos</h3></div>
+                        <div> <p>$0</p></div>
+                    </div>
+                    <div class="flex flex-row justify-between m-5">
+                        <div><h3>Total</h3></div>
+                        <div> <p>$0</p></div>
+                    </div>
+                </div><!--Ancla al Inicio -->
+                <div class="bg-red-100">
+                    <h2>Filtros</h2>
+                    <div>
+                        <h3>Categorias</h3>
+                        <div >
+                            <select id="selectDeCategoriasFiltro">
+                                <option value="Todos">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="Section-Operaciones" class="bg-blue-100 w-[56rem] m-5">
+            <div class="flex flex-row justify-between p-10 w-full h-auto bg-red-100">
+                <h2>Operaciones</h2>
+                <div>
+                    <button id="botonAgregarNuevaOperacion"class="bg-green-100">+ Nueva categoria</button>
+                </div>
+            </div>
+            <div class="hidden bg-green-100"id="mostrarImagen">
+                <img src="https://placedog.net/400/249?id=178" alt="Aca hay una imagen">
+            </div>
+            <div class="flex flex-col" id="mostrarOperaciones">
+            </div>
+        </div>
+    </div>
+    <div id="modalNuevaOperacion" class="hidden">
+        <form id="formNuevaOperacion">
+            <div>
+                <h2>Descripcion</h2>
+                <input type="text" name="descripcion" id="descripcion">
+            </div>
+            <div>
+                <h2>Monto</h2>
+                <input type="number" name="" id="montoDeOperacion"><!--condicionales de formulario tipo gasto ganancia-->
+            </div>
+            <div>
+                <h2>tipo</h2>
+                <select name="" id="tipoDeOperacion">
+                    <option value="Gasto">Gasto</option>
+                    <option value="Ganancia">Ganancia </option>
+                </select>
+            </div>
+            <div>
+                <h2>Categoria</h2>
+                <select name="" id="selectDeCategoriasAgregarOperacion">
+                </select>
+            </div>
+            <div>
+                <h2>Fecha</h2>
+                <input type="date" name="" id="fechaDeOperacion">
+            </div>
+            <div>
+                <button id="cancelarNuevaOperacion">cancelar</button>
+                <button id="nuevaOperacion" type="submit">Cargar Operacion</button>
+            </div>
+        </form>
+    </div>
+
+
+</body>
+<script src="./app.js" type="module"></script>
+</html>
