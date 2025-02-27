@@ -36,13 +36,21 @@ const guardarCategoria =()=>{
   localStorage.setItem("categorias", JSON.stringify(categorias))
 }
 
-const mostrarCategorias = ()=>{
-  contenedorCategorias.innerHTML = categorias.map((categoria, index) => `
+const mostrarCategorias = (categorias,id)=>{
+  contenedorCategorias.innerHTML = categorias.map((categoria,index) => `
   <div class="flex flex-row justify-around">
-   <p>${categoria}</p>
-    <button ${index}>Eliminar</button> 
-    <button ${index}> Editar </button> </div>
+   <p id="${index}">${categoria}</p>
+    <button id="${id}" class="boton-eliminar bg-red-100">Eliminar</button> 
+    <button > Editar </button> </div>
   `).join("")
+
+//const botonesEliminarCategoria = $$(".boton-eliminar") 
+//botonesEliminarCategoria.forEach((boton) => {
+//  boton.addEventListener("click", () => {
+    
+   
+//  })
+//})
 }
 const agregarCategoria = () => {
   const nuevaCategoria = inputCategoria.value
@@ -97,18 +105,31 @@ const modalNuevaOperacion =$("#modalNuevaOperacion")
 const mostrarOperacionesEnHTML = $("#mostrarOperaciones")
 const mostrarImagen = $("#mostrarImagen")
 const nuevaOperacion= $("#nuevaOperacion")
-const pintarOperaciones = ()=>{
+const pintarOperaciones = (id)=>{
   mostrarOperacionesEnHTML.innerHTML = operaciones.map((operacion, index) => 
   `<div class="flex flex-row justify-around">
     <p>${operacion.descripcion}</p>
     <p>${operacion.monto}</p>
     <p>${operacion.categoria}</p>
     <p>${operacion.fecha}</p>
-    <button ${index}>Eliminar</button>
-    <button ${index}>Editar</button>
+    <button id="${operacion.id}" class="boton-eliminar-operacion">Eliminar</button>
+    <button >Editar</button>
     </div>`).join("")
-}
+    const botonesEliminarOperacion = $$(".boton-eliminar-operacion")
+  botonesEliminarOperacion.forEach((boton)=>{
+    boton.addEventListener("click", ()=>{
+      console.log(boton.id,"hola")
+    eliminarOperacion(id)
 
+  })
+})
+}
+const eliminarOperacion =(id)=>{
+  operaciones = operaciones.filter((operacion)=>operacion.id !== id)
+  guardarOperaciones()
+  pintarOperaciones(operaciones)
+
+}
 const abrirModalNuevaOperacion = ()=>{
   if(modalNuevaOperacion.classList.contains("hidden")&& main.classList.contains("flex")){
     modalNuevaOperacion.classList.remove("hidden");
@@ -131,6 +152,7 @@ const selectCategoria = $("#selectDeCategoriasAgregarOperacion")
 const cargarOperacion =(e)=>{
   e.preventDefault()
   const nuevaOperacion = {
+    id: crypto.randomUUID(),
     descripcion:inputDescripcion.value,
     monto: inputMonto.value,
     tipo:inputTipo.value,
