@@ -49,13 +49,43 @@
                 <div class="bg-red-100">
                     <h2>Filtros</h2>
                     <div>
-                        <h3>Categorias</h3>
-                        <div >
-                            <select id="selectDeCategoriasFiltro">
+                        <h3>Tipo</h3>
+                        <div>
+                            <select name="" id="select-gasto-ganancia">
                                 <option value="Todos">Todos</option>
-                                
+                                <option value="Gasto">gasto</option>
+                                <option value="Ganancia"></option>
                             </select>
                         </div>
+                    </div>
+                    <div>
+                        <h3>Categorias</h3>
+                        <div>
+                            <select id="selectDeCategoriasFiltro">
+                                <option value="Todos" default>Todos</option>
+                                <option value="Mascotas">Mascotas</option>
+                                <option value="Comida">Comida</option>
+                                <option value="servicios">servicios</option>
+                                <option value="trabajo">trabajo</option>
+                                <option value="Salidas">Salidas</option>
+                                <option value="educacion">Educacion</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Desde</h3>
+                        <input type="date" name="" id="filtro-fecha">
+                    </div>
+                    <div>
+                        <h3>Ordenar Por</h3>
+                        <select name="" id="orden-tipo">
+                            <option value="reciente">Mas reciente</option>
+                            <option value="antiguos">Mas antiguos</option>
+                            <option value="mayor">Mayor Monto</option>
+                            <option value="menor">Menor monto</option>
+                            <option value="a/z">A/Z</option>
+                            <option value="z/a">Z/A</option>
+                        </select>
                     </div>
                 </div>
             </div>

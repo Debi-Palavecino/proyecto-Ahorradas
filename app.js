@@ -124,7 +124,7 @@ const pintarOperaciones = (id)=>{
   })
 })
 }
-const eliminarOperacion =(id)=>{
+function eliminarOperacion (id){
   operaciones = operaciones.filter((operacion)=>operacion.id !== id)
   guardarOperaciones()
   pintarOperaciones(operaciones)
