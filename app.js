@@ -1,9 +1,8 @@
 
 window.onload=()=>{
-  mostrarCategorias(categorias)
-  mostrarOpcionesDeCategorias(categorias)
   const operaciones = JSON.parse(localStorage.getItem("operaciones"))||[];
   pintarOperaciones(operaciones)
+  actualizarCategoria(categoriasDelLocalStorage)
 }
 function $(selector) {
   return document.querySelector(selector);
@@ -11,6 +10,7 @@ function $(selector) {
 function $$(selector) {
   return document.querySelectorAll(selector);
 }
+
 const main = $("#main")
 const modalCategoria = $("#modalCategoria");
 const botonModalCategoriaAbrir = $("#botonModalCategoria");
@@ -24,44 +24,6 @@ const abrirModalCategoria = () => {
   }
 }
 botonModalCategoriaAbrir.addEventListener("click", abrirModalCategoria);
-
-
-const botonAñadirCategoria = $("#boton-añadir-categoria")
-const inputCategoria = $("#input-categoria")
-const contenedorCategorias = $(".contenedor-categorias")
-const categorias= JSON.parse(localStorage.getItem("categorias"))||[];
-
-
-const guardarCategoria =()=>{
-  localStorage.setItem("categorias", JSON.stringify(categorias))
-}
-
-const mostrarCategorias = (categorias,id)=>{
-  contenedorCategorias.innerHTML = categorias.map((categoria,index) => `
-  <div class="flex flex-row justify-around">
-   <p id="${index}">${categoria}</p>
-    <button id="${id}" class="boton-eliminar bg-red-100">Eliminar</button> 
-    <button > Editar </button> </div>
-  `).join("")
-
-//const botonesEliminarCategoria = $$(".boton-eliminar") 
-//botonesEliminarCategoria.forEach((boton) => {
-//  boton.addEventListener("click", () => {
-    
-   
-//  })
-//})
-}
-const agregarCategoria = () => {
-  const nuevaCategoria = inputCategoria.value
-  if(nuevaCategoria){
-    categorias.push(nuevaCategoria)
-    inputCategoria.value = ""
-    mostrarCategorias()
-    guardarCategoria()
-    mostrarOpcionesDeCategorias()
-  }
-}
 const inicio = $("#inicio")
 const cerrarModalCategoria=()=>{
   if(modalCategoria.classList.contains("flex")&& main.classList.contains("hidden")){
@@ -72,22 +34,53 @@ const cerrarModalCategoria=()=>{
   }
 }
 inicio.addEventListener("click", cerrarModalCategoria)
-botonAñadirCategoria.addEventListener("click", agregarCategoria)
 
-const selectDeCategorias =$("#selectDeCategoriasFiltro")
-const selectDeCategoriasAgregar=$("#selectDeCategoriasAgregarOperacion")
 
-const mostrarOpcionesDeCategorias = (categorias)=>{
-  if(!categorias || categorias.length === 0){
-    return
-  }
-  const opciones = categorias.map((categoria, index) => `
-  <option value="${index}">${categoria}</option>`).join("")
-  selectDeCategorias.innerHTML = opciones
-  selectDeCategoriasAgregar.innerHTML = opciones
+const botonAñadirCategoria = $("#boton-añadir-categoria")
+const inputNuevaCategoria = $("#input-categoria")
+const contenedorCategorias = $(".contenedor-categorias")
+const selectFiltroCategoria =$("#selectDeCategoriasFiltro")
+const selectDeCategoriasAgregarOperacion=$("#selectDeCategoriasAgregarOperacion")
+
+let categoriasDelLocalStorage = JSON.parse(localStorage.getItem("categorias")) || [{categoria:"Todos", id:"1"}]
+
+const guardarCategoriasEnLocalStorage = ()=>{
+  localStorage.setItem("categorias", JSON.stringify(categoriasDelLocalStorage))
 }
 
+const agregarNuevaCategoria = ()=>{
+  const nuevaCategoria = inputNuevaCategoria.value.trim()
+   const categoriaAlLocal = {
+    categoria: nuevaCategoria,
+    id:crypto.randomUUID()
+   }
+   console.log(categoriaAlLocal)
+   categoriasDelLocalStorage.push(categoriaAlLocal)
+   guardarCategoriasEnLocalStorage()
+   actualizarCategoria(categoriasDelLocalStorage)
+   mostrarCategorias(categoriasDelLocalStorage)
+   inputNuevaCategoria.value = ""
+}
+botonAñadirCategoria.addEventListener("click",agregarNuevaCategoria)
 
+const actualizarCategoria = (categorias)=>{
+  selectFiltroCategoria.innerHTML=""
+  selectDeCategoriasAgregarOperacion.innerHTML=""
+  const opcionParaSelectFiltroAgregar = categorias.map(categoria=>
+    `<option value="${categoria.categoria}">${categoria.categoria}</option>`).join("")
+    selectFiltroCategoria.innerHTML = opcionParaSelectFiltroAgregar
+    selectDeCategoriasAgregarOperacion.innerHTML= opcionParaSelectFiltroAgregar
+}
+const mostrarCategorias = (categorias)=>{
+  contenedorCategorias.innerHTML=""
+  const categoriasHTML = categorias.map(categoria=>{
+    contenedorCategorias.innerHTML= `<div class="categoria" id="${categoria.id}">${categoria.categoria} 
+    <button id="${categoria.id}"> eliminar </button>
+    <button id="${categoria.id}">editar <button>
+    </div>`
+  }).join("")
+  contenedorCategorias.innerHTML= categoriasHTML
+}
 
 
 
@@ -105,30 +98,32 @@ const modalNuevaOperacion =$("#modalNuevaOperacion")
 const mostrarOperacionesEnHTML = $("#mostrarOperaciones")
 const mostrarImagen = $("#mostrarImagen")
 const nuevaOperacion= $("#nuevaOperacion")
-const pintarOperaciones = (id)=>{
-  mostrarOperacionesEnHTML.innerHTML = operaciones.map((operacion, index) => 
+const pintarOperaciones = (operacionPorPintar)=>{
+  mostrarOperacionesEnHTML.innerHTML = operacionPorPintar.map((operacion) => 
   `<div class="flex flex-row justify-around">
     <p>${operacion.descripcion}</p>
-    <p>${operacion.monto}</p>
     <p>${operacion.categoria}</p>
+    <p>${operacion.monto}</p>
     <p>${operacion.fecha}</p>
     <button id="${operacion.id}" class="boton-eliminar-operacion">Eliminar</button>
     <button >Editar</button>
     </div>`).join("")
     const botonesEliminarOperacion = $$(".boton-eliminar-operacion")
   botonesEliminarOperacion.forEach((boton)=>{
-    boton.addEventListener("click", ()=>{
-      console.log(boton.id,"hola")
-    eliminarOperacion(id)
+    boton.addEventListener("click", (e)=>{
+      console.log(e)
+    eliminarOperacion(boton.id)
 
   })
 })
 }
 function eliminarOperacion (id){
-  operaciones = operaciones.filter((operacion)=>operacion.id !== id)
+  const index = operaciones.findIndex((operacion) => operacion.id === id);
+  if (index !== -1) {
+    operaciones.splice(index, 1); 
+  }
   guardarOperaciones()
   pintarOperaciones(operaciones)
-
 }
 const abrirModalNuevaOperacion = ()=>{
   if(modalNuevaOperacion.classList.contains("hidden")&& main.classList.contains("flex")){
@@ -147,14 +142,13 @@ const inputDescripcion= $("#descripcion")
 const inputMonto = $("#montoDeOperacion")
 const inputFecha = $("#fechaDeOperacion")
 const inputTipo = $("#tipoDeOperacion")
-const selectCategoria = $("#selectDeCategoriasAgregarOperacion")
 
 const cargarOperacion =(e)=>{
   e.preventDefault()
   const nuevaOperacion = {
     id: crypto.randomUUID(),
     descripcion:inputDescripcion.value,
-    monto: inputMonto.value,
+    monto: Number(inputMonto.value),
     tipo:inputTipo.value,
     categoria: selectCategoria.value,
     fecha: inputFecha.value,
@@ -169,18 +163,23 @@ const cargarOperacion =(e)=>{
 }
 
 
-mostrarCategorias(categorias)
+//mostrarCategorias(categorias)
 
 nuevaOperacion.addEventListener("click", cargarOperacion)  
 
-
+//..... filtros
+ //const selectFiltroCategoria =$("#selectDeCategoriasFiltro")
 const agruparPorCategoria = () => {
+  console.log("hola")
+  console.log(selectFiltroCategoria.value)
+  console.log(operaciones)
   mostrarOperacionesEnHTML.innerHTML=""
-  const agrupadosPorCategoria = operaciones.filter(operacion => operacion.categorias === selectCategoria.value);
+  const agrupadosPorCategoria = operaciones.filter(operacion => operacion.categoria === selectFiltroCategoria.value);
+  console.log(agrupadosPorCategoria)
+
   pintarOperaciones(agrupadosPorCategoria)
 }
-selectCategoria.addEventListener("change", agruparPorCategoria)
-
+selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
 
 
 //<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>    fecha.format('DD/MM/YYYY')

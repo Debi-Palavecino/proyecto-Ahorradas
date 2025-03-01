@@ -29,9 +29,9 @@
         </div>
     </div>
     <div id="main" class="flex justify-around flex-row z-10 align-center">
-        <div class="flex flex-row w-auto bg-blue-200 h-[20rem] m-5" >
-            <div class="flex flex-col justify-between p-10">
-                <div class="bg-green-100 w-[16rem] h-[26rem] text-center">
+        <div class="flex flex-row w-auto bg-blue-200 h-auto m-5" >
+            <div class="flex flex-col justify-around align-center p-10">
+                <div class="bg-green-100 w-[16rem] h-[10rem] text-center m-5">
                     <H2>Balance</H2>
                     <div class="flex flex-row justify-between m-5">
                         <div><h3>Ganancias</h3></div>
@@ -46,46 +46,51 @@
                         <div> <p>$0</p></div>
                     </div>
                 </div><!--Ancla al Inicio -->
-                <div class="bg-red-100">
-                    <h2>Filtros</h2>
-                    <div>
-                        <h3>Tipo</h3>
-                        <div>
-                            <select name="" id="select-gasto-ganancia">
-                                <option value="Todos">Todos</option>
-                                <option value="Gasto">gasto</option>
-                                <option value="Ganancia"></option>
+                <div class="bg-red-100 w-[16rem] text-left m-5">
+                    <div class="m-5 flex flex-row justify-between">
+                        <h2>Filtros</h2>
+                        <button> ocultar filtros</button>
+                    </div>
+                    <div >
+                        <div class="m-5">
+                            <h3>Tipo</h3>
+                            <div>
+                                <select name="" class="w-[10rem]" id="select-gasto-ganancia">
+                                    <option value="Todos">Todos</option>
+                                    <option value="Gasto">gasto</option>
+                                    <option value="Ganancia"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="m-5">
+                            <h3>Categorias</h3>
+                            <div>
+                                <select id="selectDeCategoriasFiltro">
+                                    <option value="Todos" default>Todos</option>
+                                    <option value="Mascotas">Mascotas</option>
+                                    <option value="Comida">Comida</option>
+                                    <option value="servicios">servicios</option>
+                                    <option value="trabajo">trabajo</option>
+                                    <option value="Salidas">Salidas</option>
+                                    <option value="educacion">Educacion</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="m-5">
+                            <h3>Desde</h3>
+                            <input type="date" name="" id="filtro-fecha">
+                        </div>
+                        <div class="m-5">
+                            <h3>Ordenar Por</h3>
+                            <select name="" id="orden-tipo">
+                                <option value="reciente">Mas reciente</option>
+                                <option value="antiguos">Mas antiguos</option>
+                                <option value="mayor">Mayor Monto</option>
+                                <option value="menor">Menor monto</option>
+                                <option value="a/z">A/Z</option>
+                                <option value="z/a">Z/A</option>
                             </select>
                         </div>
-                    </div>
-                    <div>
-                        <h3>Categorias</h3>
-                        <div>
-                            <select id="selectDeCategoriasFiltro">
-                                <option value="Todos" default>Todos</option>
-                                <option value="Mascotas">Mascotas</option>
-                                <option value="Comida">Comida</option>
-                                <option value="servicios">servicios</option>
-                                <option value="trabajo">trabajo</option>
-                                <option value="Salidas">Salidas</option>
-                                <option value="educacion">Educacion</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <h3>Desde</h3>
-                        <input type="date" name="" id="filtro-fecha">
-                    </div>
-                    <div>
-                        <h3>Ordenar Por</h3>
-                        <select name="" id="orden-tipo">
-                            <option value="reciente">Mas reciente</option>
-                            <option value="antiguos">Mas antiguos</option>
-                            <option value="mayor">Mayor Monto</option>
-                            <option value="menor">Menor monto</option>
-                            <option value="a/z">A/Z</option>
-                            <option value="z/a">Z/A</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -124,6 +129,13 @@
             <div>
                 <h2>Categoria</h2>
                 <select name="" id="selectDeCategoriasAgregarOperacion">
+                    <option value="Todos" default>Todos</option>
+                    <option value="Mascotas">Mascotas</option>
+                    <option value="Comida">Comida</option>
+                    <option value="servicios">servicios</option>
+                    <option value="trabajo">trabajo</option>
+                    <option value="Salidas">Salidas</option>
+                    <option value="educacion">Educacion</option>
                 </select>
             </div>
             <div>
