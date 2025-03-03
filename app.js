@@ -16,6 +16,8 @@ const modalCategoria = $("#modalCategoria");
 const botonModalCategoriaAbrir = $("#botonModalCategoria");
 
 const abrirModalCategoria = () => {
+  console.log("click")
+  console.log(modalCategoria)
   if(modalCategoria.classList.contains("hidden")&& main.classList.contains("flex")){
   modalCategoria.classList.remove("hidden");
     modalCategoria.classList.add("flex");
@@ -71,17 +73,22 @@ const actualizarCategoria = (categorias)=>{
     selectFiltroCategoria.innerHTML = opcionParaSelectFiltroAgregar
     selectDeCategoriasAgregarOperacion.innerHTML= opcionParaSelectFiltroAgregar
 }
+actualizarCategoria(categoriasDelLocalStorage)
 const mostrarCategorias = (categorias)=>{
   contenedorCategorias.innerHTML=""
-  const categoriasHTML = categorias.map(categoria=>{
-    contenedorCategorias.innerHTML= `<div class="categoria" id="${categoria.id}">${categoria.categoria} 
-    <button id="${categoria.id}"> eliminar </button>
-    <button id="${categoria.id}">editar <button>
-    </div>`
-  }).join("")
-  contenedorCategorias.innerHTML= categoriasHTML
-}
+  const categoriasFiltradas = categorias.filter(categoria => categoria.categoria !== "Todos")
+  const categoriasHTML = categoriasFiltradas.map(categoria => `
+    <div class="categoria" id="${categoria.id}">
+      ${categoria.categoria}
+      <button class="btn-eliminar" data-id="${categoria.id}">Eliminar</button>
+      <button class="btn-editar" data-id="${categoria.id}">Editar</button>
+    </div>
+  `).join("");
 
+  // Insertar el HTML generado en el contenedor
+  contenedorCategorias.innerHTML = categoriasHTML;
+}
+mostrarCategorias(categoriasDelLocalStorage)
 
 
 
@@ -132,7 +139,7 @@ const abrirModalNuevaOperacion = ()=>{
     main.classList.remove("flex");
     main.classList.add("hidden");
   }
-  mostrarOpcionesDeCategorias()
+  actualizarCategoria(categoriasDelLocalStorage)
 }
 botonNuevaOperacion.addEventListener("click", abrirModalNuevaOperacion)
 
@@ -179,7 +186,10 @@ const agruparPorCategoria = () => {
 
   pintarOperaciones(agrupadosPorCategoria)
 }
-selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
+// const agruparTodasLasCategorias =()=>{
+  
+// }
+//selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
 
 
 //<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>    fecha.format('DD/MM/YYYY')

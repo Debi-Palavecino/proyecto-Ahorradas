@@ -7,49 +7,59 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <header class="flex justify-around w-full bg-blue-300 h-full">
-        <div id="inicio" class="w-1/4 bg-blue-400"><h1>Ahorradas</h1></div>
-        <div class="flex w-1/4  bg-blue-100">
-            <ul>
-                <li><button id="botonModalCategoria">categoria</button></li>
-                <li>Balance</li>
-                <li>Reportes</li>
+    <!--Encabezado y botones principales-->
+    <header class="flex justify-around w-full bg-emerald-400 h-full">
+        <div id="inicio" class="w-[16rem]  flex flex-row m-2 align-center justify-center text-center">
+            <i class="fa-solid fa-wallet w-[7rem] text-5xl text-black text-center m-2"></i><h1 class="text-5xl m-2">Ahorradas</h1>
+        </div>
+        <div class="flex flex-row justify-around align-center">
+            <ul class="flex flex-row justify-center text-center align-center m-5">
+                <li class=""><button class=" flex-row w-[10rem] h-[2.5rem] rounded-xl  hover:bg-emerald-100 text-lg m-2" id="botonInicioBalance"><i class="fas fa-chart-line m-2 text-2xl" ></i>Balance</button></li>
+                <li class=""><button class=" flex-row w-[10rem] h-[2.5rem] rounded-xl  hover:bg-emerald-100 text-lg m-2" id="botonModalCategoria"><i class="fa-solid fa-tags m-2 text-2xl"></i>Categoria</button></li>
+                <li class=""><button class=" flex-row w-[10rem] h-[2.5rem] rounded-xl  hover:bg-emerald-100 text-lg m-2" id="botonModalReportes"><i class="fas fa-chart-pie m-2 text-2xl" ></i>Reportes</button></li>
             </ul>
         </div>
     </header>
+    <!--modales categoria / balance-->
     <div class="hidden flex justify-around align-center p-20 overflow-hidden z-40 h-[46rem] w-full bg-gray-400 " id="modalCategoria" >
-        <div id="cargarCategoria" class="flex flex-col justify-around p-10 h-auto align-center bg-white">
-            <div class="flex justify-around flex-row">
+        <div id="cargarCategoria" class="flex flex-col rounded-2xl justify-around p-10 h-auto align-center bg-white">
+            <div class="flex justify-around  flex-row">
                 <input id="input-categoria" type="text" name="" placeholder="Ingresa una categoria">
                 <button id="boton-añadir-categoria" type="submit">Cargar Categoria</button>
             </div>
-            <div class="contenedor-categorias flex flex-col h-auto">
+            <div class="contenedor-categorias rounded-2xl flex flex-col h-auto">
                 
             </div>
         </div>
     </div>
-    <div id="main" class="flex justify-around flex-row z-10 align-center">
-        <div class="flex flex-row w-auto bg-blue-200 h-auto m-5" >
+    <!--cuerpo de la pagina-->
+    <div id="main" class="flex justify-around bg-gray-100 flex-row z-10 align-center">
+        <div class="flex flex-row w-auto h-auto m-5" >
             <div class="flex flex-col justify-around align-center p-10">
-                <div class="bg-green-100 w-[16rem] h-[10rem] text-center m-5">
-                    <H2>Balance</H2>
-                    <div class="flex flex-row justify-between m-5">
-                        <div><h3>Ganancias</h3></div>
+                <!--Ancla al Inicio -->
+                <div class="bg-white shadow-2xl w-[16rem] h-[16rem] rounded-2xl text-center m-5">
+                    <H2 class="text-4xl m-5 font-medium" >Balance</H2>
+                    <div class="flex flex-row justify-between h-[2.5rem] m-5">
+                        <div class="text-xl ">
+                            <h3>Ganancias</h3>
+                        </div>
+                        <div>
+                            <p class="text-green-900">+$0</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-row justify-between h-[2.5rem] m-5">
+                        <div class="text-xl "><h3>Gastos</h3></div>
+                        <div> <p class="text-red-900">-$0</p></div>
+                    </div>
+                    <div class="flex flex-row justify-between h-[2.5rem] m-5">
+                        <div class="text-xl "><h3>Total</h3></div>
                         <div> <p>$0</p></div>
                     </div>
-                    <div class="flex flex-row justify-between m-5">
-                        <div><h3>Gastos</h3></div>
-                        <div> <p>$0</p></div>
-                    </div>
-                    <div class="flex flex-row justify-between m-5">
-                        <div><h3>Total</h3></div>
-                        <div> <p>$0</p></div>
-                    </div>
-                </div><!--Ancla al Inicio -->
-                <div class="bg-red-100 w-[16rem] text-left m-5">
-                    <div class="m-5 flex flex-row justify-between">
-                        <h2>Filtros</h2>
-                        <button> ocultar filtros</button>
+                </div>
+                <div class="bg-white rounded-2xl shadow-2xl w-[16rem] text-left m-5">
+                    <div class="m-5 flex flex-row  justify-between">
+                        <h2 class="text-2xl">Filtros</h2>
+                        <button id="seccion-filtros" class="text-blue-600 hover:text-blue-400 underline"> ocultar filtros</button>
                     </div>
                     <div >
                         <div class="m-5">
@@ -95,17 +105,17 @@
                 </div>
             </div>
         </div>
-        <div id="Section-Operaciones" class="bg-blue-100 w-[56rem] m-5">
-            <div class="flex flex-row justify-between p-10 w-full h-auto bg-red-100">
-                <h2>Operaciones</h2>
+        <div id="Section-Operaciones" class="bg-white rounded-2xl shadow-2xl w-[56rem] m-5">
+            <div class="flex flex-row justify-between p-10 w-full border-b-4 border-gray-100 h-auto rounded-t-2xl">
+                <h2 class="text-2xl">Operaciones</h2>
                 <div>
-                    <button id="botonAgregarNuevaOperacion"class="bg-green-100">+ Nueva categoria</button>
+                    <button id="botonAgregarNuevaOperacion"class=" w-[12rem] text-lg h-[3rem] rounded-xl bg-emerald-300 hover:bg-emerald-400">+ Nueva categoria</button>
                 </div>
             </div>
             <div class="hidden bg-green-100"id="mostrarImagen">
                 <img src="https://placedog.net/400/249?id=178" alt="Aca hay una imagen">
             </div>
-            <div class="flex flex-col" id="mostrarOperaciones">
+            <div class="flex flex-col bg-emerald-100" id="mostrarOperaciones">
             </div>
         </div>
     </div>
@@ -151,5 +161,7 @@
 
 
 </body>
+<script src="https://kit.fontawesome.com/885897e40b.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script src="./app.js" type="module"></script>
 </html>
