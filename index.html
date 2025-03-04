@@ -44,16 +44,16 @@
                             <h3>Ganancias</h3>
                         </div>
                         <div>
-                            <p class="text-green-900">+$0</p>
+                            <p id="parrafoGanancias" class="text-green-900">+$0</p>
                         </div>
                     </div>
                     <div class="flex flex-row justify-between h-[2.5rem] m-5">
                         <div class="text-xl "><h3>Gastos</h3></div>
-                        <div> <p class="text-red-900">-$0</p></div>
+                        <div> <p id="parrafoGastos" class="text-red-900">-$0</p></div>
                     </div>
                     <div class="flex flex-row justify-between h-[2.5rem] m-5">
                         <div class="text-xl "><h3>Total</h3></div>
-                        <div> <p>$0</p></div>
+                        <div> <p id="sumaTotal">$0</p></div>
                     </div>
                 </div>
                 <div class="bg-white rounded-2xl shadow-2xl w-[16rem] text-left m-5">
@@ -112,10 +112,17 @@
                     <button id="botonAgregarNuevaOperacion"class=" w-[12rem] text-lg h-[3rem] rounded-xl bg-emerald-300 hover:bg-emerald-400">+ Nueva categoria</button>
                 </div>
             </div>
-            <div class="hidden bg-green-100"id="mostrarImagen">
-                <img src="https://placedog.net/400/249?id=178" alt="Aca hay una imagen">
+            <div class="hidden bg-green-100 flex flex-col justify-center align-center text-center shadow-2xl"id="mostrarImagen">
+                <div class="m-5">
+                    <H1 class="text-5xl">Ups!</H1>
+                        <h3 class="text-3xl">Lo Siento, No puedo Mostrar Nada Por El Momento.</h3>
+                    <h4 class="text-2xl">Intenta Nuevamente</h4>
+                </div>
+                <div class="flex justify-center align-center m-5">
+                    <img src="https://placedog.net/400/249?id=118" alt="Aca hay una imagen">
+                </div>
             </div>
-            <div class="flex flex-col bg-emerald-100" id="mostrarOperaciones">
+            <div class="flex flex-col" id="mostrarOperaciones">
             </div>
         </div>
     </div>

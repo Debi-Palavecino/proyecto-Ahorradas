@@ -1,8 +1,23 @@
 
 window.onload=()=>{
   const operaciones = JSON.parse(localStorage.getItem("operaciones"))||[];
+  if(operaciones.length === 0){
+    const mostrarImagen = $("#mostrarImagen")
+    mostrarImagen.classList.remove("hidden")
+    mostrarImagen.classList.add("flex")
+    mostrarOperacionesEnHTML.classList.add("hidden")
+    mostrarOperacionesEnHTML.classList.remove("flex")
+   }else if (operaciones.length > 0){
+     mostrarOperacionesEnHTML.classList.remove("hidden")
+     mostrarOperacionesEnHTML.classList.add("flex")
+     mostrarImagen.classList.add("hidden")
+     mostrarImagen.classList.remove("flex")
+   }
   pintarOperaciones(operaciones)
   actualizarCategoria(categoriasDelLocalStorage)
+  sumaDeGanancias()
+  sumarGastos()
+  sumaDelBalance()
 }
 function $(selector) {
   return document.querySelector(selector);
@@ -27,6 +42,13 @@ const abrirModalCategoria = () => {
 }
 botonModalCategoriaAbrir.addEventListener("click", abrirModalCategoria);
 const inicio = $("#inicio")
+const botonInicioBalance = $("#botonInicioBalance")
+const botonAnclaInicioBalance = ()=>{
+  cerrarModalCategoria()
+  // falta funcion cerrarModalReportes
+  // falta funcion cerrarOperaciones
+}
+botonInicioBalance.addEventListener("click",botonAnclaInicioBalance)
 const cerrarModalCategoria=()=>{
   if(modalCategoria.classList.contains("flex")&& main.classList.contains("hidden")){
     modalCategoria.classList.remove("flex");
@@ -96,6 +118,7 @@ mostrarCategorias(categoriasDelLocalStorage)
 
 //Nuevas Operaciones 
 const operaciones = JSON.parse(localStorage.getItem("operaciones"))||[];
+
 const guardarOperaciones =()=>{
   localStorage.setItem("operaciones", JSON.stringify(operaciones))
 };
@@ -107,12 +130,12 @@ const mostrarImagen = $("#mostrarImagen")
 const nuevaOperacion= $("#nuevaOperacion")
 const pintarOperaciones = (operacionPorPintar)=>{
   mostrarOperacionesEnHTML.innerHTML = operacionPorPintar.map((operacion) => 
-  `<div class="flex flex-row justify-around">
+  `<div class="flex flex-row justify-around bg-gray-200 rounded-md h-[3rem] m-3 p-5 align-center text-center">
     <p>${operacion.descripcion}</p>
-    <p>${operacion.categoria}</p>
+    <p>${operacion.categoria}</p> 
     <p>${operacion.monto}</p>
     <p>${operacion.fecha}</p>
-    <button id="${operacion.id}" class="boton-eliminar-operacion">Eliminar</button>
+    <button id="${operacion.id}" class="boton-eliminar-operacion  ">Eliminar</button>
     <button >Editar</button>
     </div>`).join("")
     const botonesEliminarOperacion = $$(".boton-eliminar-operacion")
@@ -157,9 +180,10 @@ const cargarOperacion =(e)=>{
     descripcion:inputDescripcion.value,
     monto: Number(inputMonto.value),
     tipo:inputTipo.value,
-    categoria: selectCategoria.value,
-    fecha: inputFecha.value,
+    categoria:selectDeCategoriasAgregarOperacion.value,
+    fecha: dayjs(inputFecha.value).format("YYYY/MM/DD")
   }
+  console.log(nuevaOperacion)
   operaciones.push(nuevaOperacion)
   guardarOperaciones()
   mostrarOperacionesEnHTML.classList.remove("hidden")
@@ -167,14 +191,57 @@ const cargarOperacion =(e)=>{
    main.classList.remove("hidden")
   main.classList.add("flex")
   pintarOperaciones(operaciones)
+  sumaDeGanancias()
+  sumarGastos()
+  sumaDelBalance()
 }
 
-
+const botonCancelarNuevaOperacion = $("#cancelarNuevaOperacion")
+const cancelarNuevaOperacion = (e)=>{
+  e.preventDefault()
+  console.log("hola")
+  modalNuevaOperacion.classList.remove("flex");
+  modalNuevaOperacion.classList.add("hidden");
+  main.classList.remove("hidden");
+  main.classList.add("flex");
+}
+botonCancelarNuevaOperacion.addEventListener("click",cancelarNuevaOperacion)
 //mostrarCategorias(categorias)
 
 nuevaOperacion.addEventListener("click", cargarOperacion)  
-
+//Balance
+//gastos 
+const parrafoGanancias = $("#parrafoGanancias")
+const sumaDeGanancias = ()=>{
+  const totalDeGanancias = (operaciones||[]).filter((operacion)=>operacion.tipo==="Ganancia")
+  const gananciasAcumuladas =totalDeGanancias.reduce((acc,elem)=>{
+    console.log(elem.monto)
+    return acc + elem.monto
+  },0)
+  parrafoGanancias.innerHTML= `+${gananciasAcumuladas}`
+  return gananciasAcumuladas
+}
+const parrafoGastos = $("#parrafoGastos")
+const sumarGastos = ()=>{
+  const totalDeGastos = (operaciones||[]).filter((operacion)=>operacion.tipo==="Gasto")
+  const gastosAcumulados =totalDeGastos.reduce((acc,elem)=>{
+    return acc + elem.monto
+  },0)
+  parrafoGastos.innerHTML = `-${gastosAcumulados}`
+  return gastosAcumulados
+}
+const sumaTotal = $("#sumaTotal")
+console.log(sumaTotal)
+const sumaDelBalance = ()=>{
+  const totalGanancias = sumaDeGanancias()
+  const totalGastos = sumarGastos()
+  const sumaBalance = totalGanancias- totalGastos
+  sumaTotal.innerHTML=`$ ${sumaBalance}`
+}
 //..... filtros
+const botonOcultarMostrarFiltros = $("#seccion-filtros")
+
+
  //const selectFiltroCategoria =$("#selectDeCategoriasFiltro")
 const agruparPorCategoria = () => {
   console.log("hola")
@@ -186,10 +253,9 @@ const agruparPorCategoria = () => {
 
   pintarOperaciones(agrupadosPorCategoria)
 }
-// const agruparTodasLasCategorias =()=>{
-  
-// }
-//selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
+
+
+selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
 
 
 //<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>    fecha.format('DD/MM/YYYY')
