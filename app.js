@@ -180,9 +180,21 @@ const pintarOperaciones = (operacionPorPintar)=>{
       botonesEliminarOperacion.forEach((boton)=>{
       boton.addEventListener("click", ()=>{
       eliminarOperacion(boton.id)
-
+    
   })
 })
+if(operaciones.length === 0){
+  const mostrarImagen = $("#mostrarImagen")
+  mostrarImagen.classList.remove("hidden")
+  mostrarImagen.classList.add("flex")
+  mostrarOperacionesEnHTML.classList.add("hidden")
+  mostrarOperacionesEnHTML.classList.remove("flex")
+ }else if (operaciones.length > 0){
+   mostrarOperacionesEnHTML.classList.remove("hidden")
+   mostrarOperacionesEnHTML.classList.add("flex")
+   mostrarImagen.classList.add("hidden")
+   mostrarImagen.classList.remove("flex")
+ }
 }
 function eliminarOperacion (id){
   const index = operaciones.findIndex((operacion) => operacion.id === id);
@@ -232,6 +244,23 @@ const cargarOperacion =(e)=>{
   sumarGastos()
   sumaDelBalance()
   cerrarModalOperacion()
+  if(operaciones.length === 0){
+    const mostrarImagen = $("#mostrarImagen")
+    mostrarImagen.classList.remove("hidden")
+    mostrarImagen.classList.add("flex")
+    mostrarOperacionesEnHTML.classList.add("hidden")
+    mostrarOperacionesEnHTML.classList.remove("flex")
+   }else if (operaciones.length > 0){
+     mostrarOperacionesEnHTML.classList.remove("hidden")
+     mostrarOperacionesEnHTML.classList.add("flex")
+     mostrarImagen.classList.add("hidden")
+     mostrarImagen.classList.remove("flex")
+   }
+   inputDescripcion.value=""
+   inputMonto.value=""
+   inputTipo.value=""
+   inputFecha.value=""
+   selectDeCategoriasAgregarOperacion.value=""
 }
 const cerrarModalOperacion = ()=>{
   modalNuevaOperacion.classList.remove("flex");
@@ -297,8 +326,13 @@ botonOcultarMostrarFiltros.addEventListener("click",mostrarOcultarFiltros)
 const agruparPorCategoria = () => {
 
   mostrarOperacionesEnHTML.innerHTML=""
+  const operacionesPorCategoriasFiltradas = selectFiltroCategoria.value
+  if(operacionesPorCategoriasFiltradas==="Todos"){
+    pintarOperaciones(operaciones)
+  }else{
   const agrupadosPorCategoria = operaciones.filter(operacion => operacion.categoria === selectFiltroCategoria.value)
   pintarOperaciones(agrupadosPorCategoria)
+  }
 }
 
 selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
@@ -306,24 +340,21 @@ const selectFiltroTipo = $("#select-filtroTipo")
 
 
 // const filtrarTodasLasOperaciones =()=>{
+//   console.log("cambio")
 //   mostrarOperacionesEnHTML.innerHTML=""
-//   const filtradosPorTipo = operaciones.filter(operacion => operacion.tipo === "Todos")
-//   pintarOperaciones(filtradosPorTipo)
+//   const filtradosPorTipo = selectFiltroTipo.value.trim()
+//   if (filtradosPorTipo ==="Todos"){
+//     pintarOperaciones(operaciones)
+    
+//   }else if ( filtradosPorTipo==="Gasto"){
+//     pintarOperaciones(filtradosPorTipo)
+//   }else if(filtradosPorTipo==="Ganancia"){
+//     pintarOperaciones(filtradosPorTipo)
+//   }
+
+    
+  
 // }
-const filtrarPorGastos= ()=>{
-  mostrarOperacionesEnHTML.innerHTML=""
-  const filtrarOperacionesPorGasto = operaciones.filter(operacion => operacion.tipo === "Gasto")
-  pintarOperaciones(filtrarOperacionesPorGasto)
-}
-const filtrarPorLasGanancias = ()=>{
-  mostrarOperacionesEnHTML.innerHTML=""
-  const filtrarPorGanancia = operaciones.filter(operacion=>operacion.tipo==="Ganancia")
-  pintarOperaciones(filtrarPorGanancia)
-}
-const filtrarPorTipo = ()=>{
-  //filtrarTodasLasOperaciones()
-  filtrarPorGastos()
-  filtrarPorLasGanancias()
-} 
-selectFiltroTipo.addEventListener("change",filtrarPorTipo)
+
+// selectFiltroTipo.addEventListener("change",filtrarTodasLasOperaciones)
 console.log(operaciones)
