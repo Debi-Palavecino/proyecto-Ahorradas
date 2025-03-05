@@ -100,20 +100,56 @@ const mostrarCategorias = (categorias)=>{
   contenedorCategorias.innerHTML=""
   const categoriasFiltradas = categorias.filter(categoria => categoria.categoria !== "Todos")
   const categoriasHTML = categoriasFiltradas.map(categoria => `
-    <div class="categoria" id="${categoria.id}">
-      ${categoria.categoria}
-      <button class="btn-eliminar" data-id="${categoria.id}">Eliminar</button>
-      <button class="btn-editar" data-id="${categoria.id}">Editar</button>
+    <div class="categoria  flex justify-between text-center w-[20rem] h-[2.5rem] bg-blue-100 m-2 rounded-md" id="${categoria.id}">
+     <div class="text-left">
+     <p> ${categoria.categoria}</p>
+     </div>
+      <div class="align-right justify-around"> 
+      <button class="btn-eliminar bg-red-100 h-[2.5rem] w-[5rem] border-solid" data-id="${categoria.id}">Eliminar</button>
+      <button class="btn-editar bg-green-300 h-[2.5rem] w-[5rem] border-solid" data-id="${categoria.id}">Editar</button>
+      </div>
     </div>
   `).join("");
-
-  // Insertar el HTML generado en el contenedor
   contenedorCategorias.innerHTML = categoriasHTML;
+  const botonesEliminarCategoria = $$(".btn-eliminar")
+  botonesEliminarCategoria.forEach((boton)=>{
+    boton.addEventListener("click",(e)=>{
+      console.log("hiciste click")
+      eliminarCategoria(boton.dataset.id)
+
+    })
+  })
+  const botonesEditarCategoria = $$(".btn-editar")
+  botonesEditarCategoria.forEach((boton)=>{
+    boton.addEventListener("click",(e)=>{
+      console.log("hiciste click")
+      const categoriaId =boton.dataset.id
+      const nuevaCategoria = inputNuevaCategoria.value
+      if(nuevaCategoria){
+        editarCategoria(categoriaId,nuevaCategoria)
+      }
+    })
+  })
+}
+function eliminarCategoria (id){
+  const index = categoriasDelLocalStorage.findIndex((categoria) => categoria.id === id);
+  if (index !== -1) {
+    categoriasDelLocalStorage.splice(index, 1); 
+  }
+  guardarCategoriasEnLocalStorage()
+  mostrarCategorias(categoriasDelLocalStorage)
 }
 mostrarCategorias(categoriasDelLocalStorage)
 
 
-
+const editarCategoria = (id,nuevaCategoria)=>{
+  const index = categoriasDelLocalStorage.findIndex(categoria=>categoria.id===id)
+  if(index!==-1){
+    categoriasDelLocalStorage[index].categoria=nuevaCategoria
+  }
+  guardarCategoriasEnLocalStorage()
+  mostrarCategorias(categoriasDelLocalStorage)
+}
 
 
 //Nuevas Operaciones 
@@ -135,14 +171,15 @@ const pintarOperaciones = (operacionPorPintar)=>{
     <p>${operacion.categoria}</p> 
     <p>${operacion.monto}</p>
     <p>${operacion.fecha}</p>
-    <button id="${operacion.id}" class="boton-eliminar-operacion  ">Eliminar</button>
+    <div class="flex justify-around rounded-md">
+    <button id="${operacion.id}" class="boton-eliminar-operacion bg-green-200 h-[1.5rem] w-[7rem]  ">Eliminar</button>
     <button >Editar</button>
+    </div>
     </div>`).join("")
     const botonesEliminarOperacion = $$(".boton-eliminar-operacion")
-  botonesEliminarOperacion.forEach((boton)=>{
-    boton.addEventListener("click", (e)=>{
-      console.log(e)
-    eliminarOperacion(boton.id)
+      botonesEliminarOperacion.forEach((boton)=>{
+      boton.addEventListener("click", ()=>{
+      eliminarOperacion(boton.id)
 
   })
 })
@@ -194,23 +231,27 @@ const cargarOperacion =(e)=>{
   sumaDeGanancias()
   sumarGastos()
   sumaDelBalance()
+  cerrarModalOperacion()
+}
+const cerrarModalOperacion = ()=>{
+  modalNuevaOperacion.classList.remove("flex");
+  modalNuevaOperacion.classList.add("hidden");
+  main.classList.remove("hidden");
+  main.classList.add("flex");
 }
 
 const botonCancelarNuevaOperacion = $("#cancelarNuevaOperacion")
 const cancelarNuevaOperacion = (e)=>{
   e.preventDefault()
-  console.log("hola")
   modalNuevaOperacion.classList.remove("flex");
   modalNuevaOperacion.classList.add("hidden");
   main.classList.remove("hidden");
   main.classList.add("flex");
 }
 botonCancelarNuevaOperacion.addEventListener("click",cancelarNuevaOperacion)
-//mostrarCategorias(categorias)
 
 nuevaOperacion.addEventListener("click", cargarOperacion)  
 //Balance
-//gastos 
 const parrafoGanancias = $("#parrafoGanancias")
 const sumaDeGanancias = ()=>{
   const totalDeGanancias = (operaciones||[]).filter((operacion)=>operacion.tipo==="Ganancia")
@@ -231,7 +272,6 @@ const sumarGastos = ()=>{
   return gastosAcumulados
 }
 const sumaTotal = $("#sumaTotal")
-console.log(sumaTotal)
 const sumaDelBalance = ()=>{
   const totalGanancias = sumaDeGanancias()
   const totalGastos = sumarGastos()
@@ -240,22 +280,50 @@ const sumaDelBalance = ()=>{
 }
 //..... filtros
 const botonOcultarMostrarFiltros = $("#seccion-filtros")
+const contenedorFiltros = $("#contenedor-filtros")
+const mostrarOcultarFiltros = ()=>{
+  if(contenedorFiltros.classList.contains("flex")){
+    contenedorFiltros.classList.add("hidden")
+    contenedorFiltros.classList.remove("flex")
+    botonOcultarMostrarFiltros.textContent ="Mostrar Filtros"
+  }else{
+    contenedorFiltros.classList.remove("hidden")
+    contenedorFiltros.classList.add("flex")
+    botonOcultarMostrarFiltros.textContent="Ocultar Filtros"
+  }
+}
+botonOcultarMostrarFiltros.addEventListener("click",mostrarOcultarFiltros)
 
-
- //const selectFiltroCategoria =$("#selectDeCategoriasFiltro")
 const agruparPorCategoria = () => {
-  console.log("hola")
-  console.log(selectFiltroCategoria.value)
-  console.log(operaciones)
-  mostrarOperacionesEnHTML.innerHTML=""
-  const agrupadosPorCategoria = operaciones.filter(operacion => operacion.categoria === selectFiltroCategoria.value);
-  console.log(agrupadosPorCategoria)
 
+  mostrarOperacionesEnHTML.innerHTML=""
+  const agrupadosPorCategoria = operaciones.filter(operacion => operacion.categoria === selectFiltroCategoria.value)
   pintarOperaciones(agrupadosPorCategoria)
 }
 
-
 selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
+const selectFiltroTipo = $("#select-filtroTipo")
 
 
-//<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>    fecha.format('DD/MM/YYYY')
+// const filtrarTodasLasOperaciones =()=>{
+//   mostrarOperacionesEnHTML.innerHTML=""
+//   const filtradosPorTipo = operaciones.filter(operacion => operacion.tipo === "Todos")
+//   pintarOperaciones(filtradosPorTipo)
+// }
+const filtrarPorGastos= ()=>{
+  mostrarOperacionesEnHTML.innerHTML=""
+  const filtrarOperacionesPorGasto = operaciones.filter(operacion => operacion.tipo === "Gasto")
+  pintarOperaciones(filtrarOperacionesPorGasto)
+}
+const filtrarPorLasGanancias = ()=>{
+  mostrarOperacionesEnHTML.innerHTML=""
+  const filtrarPorGanancia = operaciones.filter(operacion=>operacion.tipo==="Ganancia")
+  pintarOperaciones(filtrarPorGanancia)
+}
+const filtrarPorTipo = ()=>{
+  //filtrarTodasLasOperaciones()
+  filtrarPorGastos()
+  filtrarPorLasGanancias()
+} 
+selectFiltroTipo.addEventListener("change",filtrarPorTipo)
+console.log(operaciones)
