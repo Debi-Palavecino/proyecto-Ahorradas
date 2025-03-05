@@ -340,24 +340,23 @@ selectFiltroCategoria.addEventListener("change", agruparPorCategoria)
 const selectFiltroTipo = $("#select-filtroTipo")
 
 
-// const filtrarTodasLasOperaciones =()=>{
-//   console.log("cambio")
-//   mostrarOperacionesEnHTML.innerHTML=""
-//   const filtradosPorTipo = selectFiltroTipo.value.trim()
-//   if (filtradosPorTipo ==="Todos"){
-//     pintarOperaciones(operaciones)
-    
-//   }else if ( filtradosPorTipo==="Gasto"){
-//     pintarOperaciones(filtradosPorTipo)
-//   }else if(filtradosPorTipo==="Ganancia"){
-//     pintarOperaciones(filtradosPorTipo)
-//   }
+const filtrarTodasLasOperaciones =(e)=>{
+  console.log("cambio")
+  mostrarOperacionesEnHTML.innerHTML=""
+  const filtradosPorTipo = selectFiltroTipo.value
+console.log(e.target.value)  
+  if(filtradosPorTipo==="Todos"){
+    pintarOperaciones(operaciones)
+    console.log("todos")
+  } else {
+    const operacionesFiltradasPorTipo= operaciones.filter((operacion)=>operacion.tipo=filtradosPorTipo)
+    console.log("Gasto/Ganancia")
+    console.log(operacionesFiltradasPorTipo)
+    pintarOperaciones(operacionesFiltradasPorTipo)
+  }
+}
 
-    
-  
-// }
-
-// selectFiltroTipo.addEventListener("change",filtrarTodasLasOperaciones)
+selectFiltroTipo.addEventListener("change",filtrarTodasLasOperaciones)
 console.log(operaciones)
 //    ---------------------Orden Por------------
 const selectOrdenarOperaciones =$("#orden-tipo")
@@ -376,12 +375,13 @@ const ordenarLasOperaciones = ()=>{
   }else if (orden==="mayor"){
     const operacionesDeMayorAMenor = [...operaciones].sort((a,b)=>b.monto-a.monto)
     pintarOperaciones(operacionesDeMayorAMenor)
-  }else if (orden==="antiguos"){
-    const ordenarPorOperacionMenosReciente = [...operaciones].sort((a,b)=>dayjs(a.fecha).diff(dayjs(b.fecha)))
-    pintarOperaciones(ordenarPorOperacionMenosReciente)
-  }else if (orden ==="reciente"){
-    const ordenarPorOperacionMasReciente = [...operaciones].sort((a,b)=>dayjs(b.fecha).diff(dayjs(a.fecha)))
-    pintarOperaciones(ordenarPorOperacionMasReciente)
   }
+  // }else if (orden==="antiguos"){
+  //   const ordenarPorOperacionMenosReciente = [...operaciones].sort((a,b)=>dayjs(a.fecha).diff(dayjs(b.fecha)))
+  //   pintarOperaciones(ordenarPorOperacionMenosReciente)
+  // }else if (orden ==="reciente"){
+  //   const ordenarPorOperacionMasReciente = [...operaciones].sort((a,b)=>dayjs(b.fecha).diff(dayjs(a.fecha)))
+  //   pintarOperaciones(ordenarPorOperacionMasReciente)
+  // }
 }
 selectOrdenarOperaciones.addEventListener("change",ordenarLasOperaciones)
