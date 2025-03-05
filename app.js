@@ -119,27 +119,28 @@ const mostrarCategorias = (categorias)=>{
 
     })
   })
-  const botonesEditarCategoria = $$(".btn-editar")
-  botonesEditarCategoria.forEach((boton)=>{
-    boton.addEventListener("click",(e)=>{
-      console.log("hiciste click")
-      const categoriaId =boton.dataset.id
-      const nuevaCategoria = inputNuevaCategoria.value
-      if(nuevaCategoria){
-        editarCategoria(categoriaId,nuevaCategoria)
-      }
-    })
-  })
+  // const botonesEditarCategoria = $$(".btn-editar")
+  // botonesEditarCategoria.forEach((boton)=>{
+  //   boton.addEventListener("click",(e)=>{
+  //     console.log("hiciste click")
+  //     const categoriaId =boton.dataset.id
+  //     const nuevaCategoria = inputNuevaCategoria.value
+  //     if(nuevaCategoria){
+  //       editarCategoria(categoriaId,nuevaCategoria)
+  //     }
+  //   })
+  // })
 }
-function eliminarCategoria (id){
-  const index = categoriasDelLocalStorage.findIndex((categoria) => categoria.id === id);
-  if (index !== -1) {
-    categoriasDelLocalStorage.splice(index, 1); 
-  }
-  guardarCategoriasEnLocalStorage()
-  mostrarCategorias(categoriasDelLocalStorage)
-}
+// function eliminarCategoria (id){
+//   const index = categoriasDelLocalStorage.findIndex((categoria) => categoria.id === id);
+//   if (index !== -1) {
+//     categoriasDelLocalStorage.splice(index, 1); 
+//   }
+//   guardarCategoriasEnLocalStorage()
+//   mostrarCategorias(categoriasDelLocalStorage)
+// }
 mostrarCategorias(categoriasDelLocalStorage)
+
 
 
 const editarCategoria = (id,nuevaCategoria)=>{
@@ -358,3 +359,17 @@ const selectFiltroTipo = $("#select-filtroTipo")
 
 // selectFiltroTipo.addEventListener("change",filtrarTodasLasOperaciones)
 console.log(operaciones)
+//    ---------------------Orden Por------------
+const selectOrdenarOperaciones =$("#orden-tipo")
+const ordenarLasOperaciones = ()=>{
+  mostrarOperacionesEnHTML.innerHTML=""
+  const orden = selectOrdenarOperaciones.value
+  if(orden==="a/z"){
+    const operacionesOrdenadasAZ =[...operaciones].sort((a,b)=>a.descripcion.localeCompare(b.descripcion))
+    pintarOperaciones(operacionesOrdenadasAZ)
+  }else if (orden==="z/a"){
+    const operacionesOrdenadasZA =[...operaciones].sort((a,b)=>b.descripcion.localeCompare(a.descripcion))
+    pintarOperaciones(operacionesOrdenadasZA)
+  }
+}
+selectOrdenarOperaciones.addEventListener("change",ordenarLasOperaciones)
