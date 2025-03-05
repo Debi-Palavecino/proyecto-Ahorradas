@@ -370,6 +370,18 @@ const ordenarLasOperaciones = ()=>{
   }else if (orden==="z/a"){
     const operacionesOrdenadasZA =[...operaciones].sort((a,b)=>b.descripcion.localeCompare(a.descripcion))
     pintarOperaciones(operacionesOrdenadasZA)
+  }else if(orden === "menor"){
+    const operacionesDeMenorAMAyor = [...operaciones].sort((a,b)=>a.monto-b.monto)
+    pintarOperaciones(operacionesDeMenorAMAyor)
+  }else if (orden==="mayor"){
+    const operacionesDeMayorAMenor = [...operaciones].sort((a,b)=>b.monto-a.monto)
+    pintarOperaciones(operacionesDeMayorAMenor)
+  }else if (orden==="antiguos"){
+    const ordenarPorOperacionMenosReciente = [...operaciones].sort((a,b)=>dayjs(a.fecha).diff(dayjs(b.fecha)))
+    pintarOperaciones(ordenarPorOperacionMenosReciente)
+  }else if (orden ==="reciente"){
+    const ordenarPorOperacionMasReciente = [...operaciones].sort((a,b)=>dayjs(b.fecha).diff(dayjs(a.fecha)))
+    pintarOperaciones(ordenarPorOperacionMasReciente)
   }
 }
 selectOrdenarOperaciones.addEventListener("change",ordenarLasOperaciones)
