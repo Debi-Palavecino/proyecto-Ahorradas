@@ -349,7 +349,7 @@ console.log(e.target.value)
     pintarOperaciones(operaciones)
     console.log("todos")
   } else {
-    const operacionesFiltradasPorTipo= operaciones.filter((operacion)=>operacion.tipo=filtradosPorTipo)
+    const operacionesFiltradasPorTipo= operaciones.filter((operacion)=>operacion.tipo===filtradosPorTipo)
     console.log("Gasto/Ganancia")
     console.log(operacionesFiltradasPorTipo)
     pintarOperaciones(operacionesFiltradasPorTipo)
