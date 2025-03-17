@@ -58,7 +58,14 @@ const cerrarModalCategoria=()=>{
   }
 }
 inicio.addEventListener("click", cerrarModalCategoria)
-
+const modalEditarOperacion = $("#ModalEdicionOperacion")
+const inputEditarOperacionDescripcion =$("#inputEditarOperacion")
+const inputEditarMontoOperacion =$("#inputEditarMonto")
+const inputEditarCategoriaOperacion =$("#selectEditarCategoria")
+const inputEditarTipoOperacion =$("#EditOperationTipo")
+const inputEditarFechaOperacion =$("#inputEditarFecha")
+const buttonEditaroperacion = $("#EditarOperacion")
+const buttonCancelarOperacion =$("#cancelarEdicionDeOperacion")
 
 const botonAñadirCategoria = $("#boton-añadir-categoria")
 const inputNuevaCategoria = $("#input-categoria")
@@ -90,10 +97,12 @@ botonAñadirCategoria.addEventListener("click",agregarNuevaCategoria)
 const actualizarCategoria = (categorias)=>{
   selectFiltroCategoria.innerHTML=""
   selectDeCategoriasAgregarOperacion.innerHTML=""
+  inputEditarCategoriaOperacion.innerHTML=""
   const opcionParaSelectFiltroAgregar = categorias.map(categoria=>
     `<option value="${categoria.categoria}">${categoria.categoria}</option>`).join("")
     selectFiltroCategoria.innerHTML = opcionParaSelectFiltroAgregar
     selectDeCategoriasAgregarOperacion.innerHTML= opcionParaSelectFiltroAgregar
+    inputEditarCategoriaOperacion.innerHTML=opcionParaSelectFiltroAgregar
 }
 /*encuentra categoria para editar*/ 
 const modalEdicionDeCategoria = $("#modalEditarCategoria")
@@ -179,9 +188,66 @@ const mostrarCategorias = (categorias)=>{
   mostrarCategorias(categoriasDelLocalStorage)
  }
 mostrarCategorias(categoriasDelLocalStorage)
+// //funciones editar y eliminar 
+
+// //elementos de modal editar operacion 
 
 
+const abrirModalEditarOperacion = (id)=>{
+  modalEditarOperacion.classList.remove("hidden")
+  modalEditarOperacion.classList.add("flex")
+  main.classList.remove("flex")
+  main.classList.add("hidden")
+  console.log(`id Recibido:${id}`)
+  console.log("Operaciones almacenadas:", operaciones);
+  let operacionParaEditar = operaciones.find(operacion => operacion.id == id);
+  if(operacionParaEditar){
+    inputEditarOperacionDescripcion.value = operacionParaEditar.descripcion
+    inputEditarMontoOperacion.value = operacionParaEditar.monto
+    categoriasParaEditarSelect(categoriasDelLocalStorage)
+    inputEditarCategoriaOperacion.value=operacionParaEditar.categoria
+    inputEditarTipoOperacion.value=operacionParaEditar.tipo
+    inputEditarFechaOperacion.value = operacionParaEditar.fecha
+    inputEditarOperacionDescripcion.dataset.id=id
 
+  }
+}
+const categoriasParaEditarSelect = (categorias) => {
+  inputEditarCategoriaOperacion.innerHTML = "";
+  const opcionesParaSelectOperacionesEditar = categorias.map(categoria => 
+      `<option value="${categoria.categoria}">${categoria.categoria}</option>`
+  ).join("");
+  inputEditarCategoriaOperacion.innerHTML = opcionesParaSelectOperacionesEditar;
+};
+const actualizarOperacionEditada =()=>{
+  const nuevaDescripcion = inputEditarOperacionDescripcion.value;
+  const nuevoMonto = inputEditarMontoOperacion.value;
+  const nuevoTipo = inputEditarTipoOperacion.value;
+  const nuevaCategoria = inputEditarCategoriaOperacion.value;
+  const nuevaFecha = inputEditarFechaOperacion.value; 
+  const operacionID = inputEditarOperacionDescripcion.dataset.id;
+  
+  const index = operaciones.findIndex(operacion => operacion.id == operacionID);
+  
+  if (index !== -1) {
+    operaciones[index].descripcion = nuevaDescripcion;
+    operaciones[index].monto = Number(nuevoMonto); 
+    operaciones[index].tipo = nuevoTipo;
+    operaciones[index].categoria = nuevaCategoria;
+    operaciones[index].fecha = nuevaFecha;
+  } else {
+    console.error("No se encontró la operación con ID:", operacionID);
+  }
+  
+  guardarOperaciones();
+  pintarOperaciones(operaciones);
+  
+  modalEditarOperacion.classList.remove("flex");
+  modalEditarOperacion.classList.add("hidden");
+  main.classList.remove("hidden");
+  main.classList.add("flex");
+}
+buttonEditaroperacion.addEventListener("click",actualizarOperacionEditada)
 
 
 //Nuevas Operaciones 
@@ -205,7 +271,7 @@ const pintarOperaciones = (operacionPorPintar)=>{
     <p>${operacion.fecha}</p>
     <div class="flex justify-around rounded-md">
     <button id="${operacion.id}" class="boton-eliminar-operacion bg-green-200 h-[1.5rem] w-[7rem]  ">Eliminar</button>
-    <button >Editar</button>
+    <button class="btn-editarOperacion " data-id="${operacion.id}">Editar</button>
     </div>
     </div>`).join("")
     const botonesEliminarOperacion = $$(".boton-eliminar-operacion")
@@ -213,6 +279,13 @@ const pintarOperaciones = (operacionPorPintar)=>{
       boton.addEventListener("click", ()=>{
       eliminarOperacion(boton.id)
     
+  })
+})
+const botonesEditarOperacion = $$(".btn-editarOperacion")
+botonesEditarOperacion.forEach((boton)=>{
+  boton.addEventListener("click", ()=>{
+    abrirModalEditarOperacion(boton.dataset.id)
+    console.log("hola")
   })
 })
 if(operaciones.length === 0){
