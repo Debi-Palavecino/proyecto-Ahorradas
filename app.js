@@ -198,8 +198,6 @@ const abrirModalEditarOperacion = (id)=>{
   modalEditarOperacion.classList.add("flex")
   main.classList.remove("flex")
   main.classList.add("hidden")
-  console.log(`id Recibido:${id}`)
-  console.log("Operaciones almacenadas:", operaciones);
   let operacionParaEditar = operaciones.find(operacion => operacion.id == id);
   if(operacionParaEditar){
     inputEditarOperacionDescripcion.value = operacionParaEditar.descripcion
@@ -285,7 +283,6 @@ const botonesEditarOperacion = $$(".btn-editarOperacion")
 botonesEditarOperacion.forEach((boton)=>{
   boton.addEventListener("click", ()=>{
     abrirModalEditarOperacion(boton.dataset.id)
-    console.log("hola")
   })
 })
 if(operaciones.length === 0){
@@ -390,7 +387,6 @@ const parrafoGanancias = $("#parrafoGanancias")
 const sumaDeGanancias = ()=>{
   const totalDeGanancias = (operaciones||[]).filter((operacion)=>operacion.tipo==="Ganancia")
   const gananciasAcumuladas =totalDeGanancias.reduce((acc,elem)=>{
-    console.log(elem.monto)
     return acc + elem.monto
   },0)
   parrafoGanancias.innerHTML= `+${gananciasAcumuladas}`
@@ -461,7 +457,6 @@ console.log(e.target.value)
 }
 
 selectFiltroTipo.addEventListener("change",filtrarTodasLasOperaciones)
-console.log(operaciones)
 //    ---------------------Orden Por------------
 const selectOrdenarOperaciones =$("#orden-tipo")
 const ordenarLasOperaciones = ()=>{
