@@ -95,6 +95,48 @@ const actualizarCategoria = (categorias)=>{
     selectFiltroCategoria.innerHTML = opcionParaSelectFiltroAgregar
     selectDeCategoriasAgregarOperacion.innerHTML= opcionParaSelectFiltroAgregar
 }
+/*encuentra categoria para editar*/ 
+const modalEdicionDeCategoria = $("#modalEditarCategoria")
+const inputEditarCategoria = $("#inputEditarCategoria")
+const botonActualizarCategoria =$("#ActualizarCategoria")
+const abrirModalEdicion = (id) => {
+  let categoriaParaEditar = categoriasDelLocalStorage.find(categoria => categoria.id == id); 
+
+  if (categoriaParaEditar) {  
+      inputEditarCategoria.value = categoriaParaEditar.categoria;
+      inputEditarCategoria.dataset.id = id; 
+      modalEdicionDeCategoria.classList.remove("hidden");
+      modalEdicionDeCategoria.classList.add("flex");
+      modalCategoria.classList.remove("flex");
+      modalCategoria.classList.add("hidden");
+  } else {
+      console.error("Categoría no encontrada");
+  }
+};
+
+botonActualizarCategoria.addEventListener("click", () => {
+  const nuevaCategoria = inputEditarCategoria.value.trim(); 
+  const categoriaId = inputEditarCategoria.dataset.id;  
+
+  if (nuevaCategoria && categoriaId) {
+      const index = categoriasDelLocalStorage.findIndex(categoria => categoria.id == categoriaId); // Comparación flexible
+      if (index !== -1) {
+          categoriasDelLocalStorage[index].categoria = nuevaCategoria;
+          guardarCategoriasEnLocalStorage();
+
+          mostrarCategorias(categoriasDelLocalStorage); 
+      } else {
+          console.error("No se encontró la categoría para actualizar.");
+      }
+
+      // Cerrar el modal de edición y reabrir el principal
+      modalEdicionDeCategoria.classList.remove("flex");
+      modalEdicionDeCategoria.classList.add("hidden");
+      modalCategoria.classList.remove("hidden");
+      modalCategoria.classList.add("flex");
+  }
+});
+
 actualizarCategoria(categoriasDelLocalStorage)
 const mostrarCategorias = (categorias)=>{
   contenedorCategorias.innerHTML=""
@@ -119,38 +161,27 @@ const mostrarCategorias = (categorias)=>{
 
     })
   })
-  // const botonesEditarCategoria = $$(".btn-editar")
-  // botonesEditarCategoria.forEach((boton)=>{
-  //   boton.addEventListener("click",(e)=>{
-  //     console.log("hiciste click")
-  //     const categoriaId =boton.dataset.id
-  //     const nuevaCategoria = inputNuevaCategoria.value
-  //     if(nuevaCategoria){
-  //       editarCategoria(categoriaId,nuevaCategoria)
-  //     }
-  //   })
-  // })
+ const botonesEditarCategoria = $$(".btn-editar")
+ botonesEditarCategoria.forEach((boton)=>{
+   boton.addEventListener("click",()=>{
+      const categoriaPorEditar =  boton.dataset.id
+      console.log(categoriaPorEditar)
+      abrirModalEdicion(categoriaPorEditar) 
+     })
+   })
 }
-// function eliminarCategoria (id){
-//   const index = categoriasDelLocalStorage.findIndex((categoria) => categoria.id === id);
-//   if (index !== -1) {
-//     categoriasDelLocalStorage.splice(index, 1); 
-//   }
-//   guardarCategoriasEnLocalStorage()
-//   mostrarCategorias(categoriasDelLocalStorage)
-// }
+ function eliminarCategoria (id){
+  const index = categoriasDelLocalStorage.findIndex((categoria) => categoria.id === id);
+  if (index !== -1) {
+    categoriasDelLocalStorage.splice(index, 1); 
+  }
+  guardarCategoriasEnLocalStorage()
+  mostrarCategorias(categoriasDelLocalStorage)
+ }
 mostrarCategorias(categoriasDelLocalStorage)
 
 
 
-const editarCategoria = (id,nuevaCategoria)=>{
-  const index = categoriasDelLocalStorage.findIndex(categoria=>categoria.id===id)
-  if(index!==-1){
-    categoriasDelLocalStorage[index].categoria=nuevaCategoria
-  }
-  guardarCategoriasEnLocalStorage()
-  mostrarCategorias(categoriasDelLocalStorage)
-}
 
 
 //Nuevas Operaciones 
@@ -216,7 +247,7 @@ const abrirModalNuevaOperacion = ()=>{
 }
 botonNuevaOperacion.addEventListener("click", abrirModalNuevaOperacion)
 
-
+// --------------------- funciones de nuevas operaciones ---------------------
 
 const inputDescripcion= $("#descripcion")
 const inputMonto = $("#montoDeOperacion")
@@ -231,7 +262,7 @@ const cargarOperacion =(e)=>{
     monto: Number(inputMonto.value),
     tipo:inputTipo.value,
     categoria:selectDeCategoriasAgregarOperacion.value,
-    fecha: dayjs(inputFecha.value).format("YYYY/MM/DD")
+    fecha: dayjs(inputFecha.value).format("DD/MM/YYYY")
   }
   console.log(nuevaOperacion)
   operaciones.push(nuevaOperacion)
@@ -363,6 +394,7 @@ const selectOrdenarOperaciones =$("#orden-tipo")
 const ordenarLasOperaciones = ()=>{
   mostrarOperacionesEnHTML.innerHTML=""
   const orden = selectOrdenarOperaciones.value
+  console.log(orden)
   if(orden==="a/z"){
     const operacionesOrdenadasAZ =[...operaciones].sort((a,b)=>a.descripcion.localeCompare(b.descripcion))
     pintarOperaciones(operacionesOrdenadasAZ)
@@ -375,13 +407,23 @@ const ordenarLasOperaciones = ()=>{
   }else if (orden==="mayor"){
     const operacionesDeMayorAMenor = [...operaciones].sort((a,b)=>b.monto-a.monto)
     pintarOperaciones(operacionesDeMayorAMenor)
+  }else if (orden==="antiguos"){
+    const ordenarPorOperacionMenosReciente = [...operaciones].sort((a,b)=>dayjs(a.fecha).diff(dayjs(b.fecha)))
+    pintarOperaciones(ordenarPorOperacionMenosReciente)
+  }else if (orden ==="reciente"){
+    const ordenarPorOperacionMasReciente = [...operaciones].sort((a,b)=>dayjs(b.fecha).diff(dayjs(a.fecha)))
+    pintarOperaciones(ordenarPorOperacionMasReciente)
   }
-  // }else if (orden==="antiguos"){
-  //   const ordenarPorOperacionMenosReciente = [...operaciones].sort((a,b)=>dayjs(a.fecha).diff(dayjs(b.fecha)))
-  //   pintarOperaciones(ordenarPorOperacionMenosReciente)
-  // }else if (orden ==="reciente"){
-  //   const ordenarPorOperacionMasReciente = [...operaciones].sort((a,b)=>dayjs(b.fecha).diff(dayjs(a.fecha)))
-  //   pintarOperaciones(ordenarPorOperacionMasReciente)
-  // }
 }
 selectOrdenarOperaciones.addEventListener("change",ordenarLasOperaciones)
+// Filtrado por Fecha 
+const filtroFecha = $("#filtro-fecha")
+
+const filtrarOperacionesPorFecha = ()=>{
+  const fechaFiltrada = filtroFecha.value
+  console.log(fechaFiltrada)
+  const operacionesFiltradasPorFecha = operaciones.filter((operacion)=>operacion.fecha === fechaFiltrada.value)
+  console.log(operacionesFiltradasPorFecha)
+  pintarOperaciones(operacionesFiltradasPorFecha)
+}
+filtroFecha.addEventListener("input",filtrarOperacionesPorFecha)

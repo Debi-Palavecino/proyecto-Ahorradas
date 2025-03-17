@@ -165,9 +165,44 @@
             </div>
         </form>
     </div>
+    <!--Modales De EDicion-->
+    <div id="modalEditarCategoria" class="hidden">
+        <h2>Editar Categoria</h2>
+        <div>
+            <input type="text" name="" id="inputEditarCategoria">
+        </div>
+        <div>
+            <button>Cancelar Edicion</button>
+            <button id="ActualizarCategoria">Categoria Editada</button>
+        </div>
+    </div>
+    <div id="ModalEdicionOperacion" class="hidden">
+        <h2>Editar Operacion</h2>
+        <div>
+            <label for="inputEditarOperacion"></label>
+            <input type="text" name="" id="inputEditarOperacion">
 
+            <label for="inputEditarMonto"></label>
+            <input type="number" name="" id="inputEditarMonto">
 
+            <label for="selectEditarCategoria"></label>
+            <select name="" id="selectEditarCategoria" required></select>
+
+            <label for="EditOperationTipo"></label>
+            <select name="" id="EditOperationTipo">
+                <option value="Gasto">Gasto</option>
+                <option value="Ganancia">Ganancia</option>
+            </select>
+
+            <label for="inputEditarFecha"></label>
+            <input type="date" name="" id="inputEditarFecha">
+
+            <button id="cancelarEdicionDeOperacion">Cancelar Edicion</button>
+            <button id="EditarOperacion">Editar Operacion</button>
+        </div>
+    </div>
 </body>
+
 <script src="https://kit.fontawesome.com/885897e40b.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script src="./app.js" type="module"></script>
